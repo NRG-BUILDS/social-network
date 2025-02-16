@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --radius: 0.6rem;
+}
+@layer base {
+  * {
+    border-color: theme("colors.gray.200"); /* Or any preferred default */
+  }
+}
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+@theme {
+  --color-brand-primary: #4c68d5;
+  --color-brand-neutral: #e2e8f0;
+}
