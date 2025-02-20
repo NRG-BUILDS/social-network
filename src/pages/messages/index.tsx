@@ -50,7 +50,7 @@ const Messages = () => {
         <div className="border-t grid lg:grid-cols-12 divide-x">
           <div className="lg:col-span-4 relative min-h-[80svh]">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Link to={"/messages/3"}>
+              <Link to={"/messages/3"} key={i}>
                 <ChatItem />
               </Link>
             ))}
