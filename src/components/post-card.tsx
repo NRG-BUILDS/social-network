@@ -3,6 +3,8 @@ import { Avatar } from "./avatar";
 import { Link } from "react-router";
 import { Post } from "@/types/post";
 import Container from "./container";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { ReactNode } from "react";
 
 type Props = {
   post: Post;
@@ -51,11 +53,32 @@ export const PostCard = ({ post }: Props) => {
           <FiMessageCircle />
           <span className="text-sm ">{post.commentsCount} Comments</span>
         </div>
-        <div className="flex items-center gap-2 text-neutral-500">
-          <span className="text-sm ">{post.likes} Likes</span>
-          <FiThumbsUp />
-        </div>
+        <ReactionButton>
+          <div className="flex items-center gap-2 text-neutral-500">
+            <span className="text-sm ">{post.likes} Likes</span>
+            <FiThumbsUp />
+          </div>
+        </ReactionButton>
       </Container>
     </div>
+  );
+};
+
+interface ReactionButtonProps {
+  children: ReactNode;
+}
+export const ReactionButton = ({ children }: ReactionButtonProps) => {
+  return (
+    <HoverCard>
+      <HoverCardTrigger>{children}</HoverCardTrigger>
+      <HoverCardContent className="rounded-full">
+        <div className="flex gap-2">
+          <div className="rounded-full size-10 bg-brand-primary" />
+          <div className="rounded-full size-10 bg-brand-primary" />
+          <div className="rounded-full size-10 bg-brand-primary" />
+          <div className="rounded-full size-10 bg-brand-primary" />
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 };
