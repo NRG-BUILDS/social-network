@@ -1,7 +1,14 @@
-import { FiBell, FiHome, FiSend, FiUser } from "react-icons/fi";
-import { Link } from "react-router";
-
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router";
+import { routes } from "@/lib/routes";
 const Sidebar = () => {
+  const [activeLink, setActiveLink] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setActiveLink(location.pathname);
+    console.log(activeLink, location.pathname);
+  }, [location]);
   return (
     <div className="sticky top-2 hidden md:block bg-white border overflow-clip rounded-lg md:col-span-3 lg:col-span-3">
       <div className="relative">
@@ -13,32 +20,23 @@ const Sidebar = () => {
         <h2 className="font-semibold text-lg">Robert Daniels</h2>
         <span className="text-sm font-light">Software Engineer</span>
       </div>
-      <div className="mt-8 px-6">
-        <ul className="divide-y *:hover:bg-gray-100">
-          <li className="p-4">
-            <Link to="#" className="flex w-full gap-4 items-center">
-              <FiHome />
-              <span>Home</span>
-            </Link>
-          </li>
-          <li className="p-4">
-            <Link to="#" className="flex w-full gap-4 items-center">
-              <FiUser />
-              <span>Profile</span>
-            </Link>
-          </li>
-          <li className="p-4">
-            <Link to="/messages" className="flex w-full gap-4 items-center">
-              <FiSend />
-              <span>Messages</span>
-            </Link>
-          </li>
-          <li className="p-4">
-            <Link to="#" className="flex w-full gap-4 items-center">
-              <FiBell />
-              <span>Notifications</span>
-            </Link>
-          </li>
+      <div className="mt-8">
+        <ul className="divide-y *:hover:bg-neutral-50">
+          {routes.map((route) => (
+            <li
+              className="p-4"
+              key={route.label}
+              data-active={route.path.includes(activeLink) ? "true" : "false"}
+            >
+              <Link
+                to={route.path}
+                className="flex px-6 w-full gap-4 items-center data-[active=true]:font-medium"
+              >
+                {route.icon}
+                <span>{route.label}</span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

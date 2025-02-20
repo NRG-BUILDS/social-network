@@ -6,7 +6,7 @@ interface ContainerProps {
 }
 
 const Container = ({ children, className }: ContainerProps) => {
-  return <div className={`p-5 ${className}`}>{children}</div>;
+  return <div className={`p-4 md:p-5 ${className}`}>{children}</div>;
 };
 
 export default Container;

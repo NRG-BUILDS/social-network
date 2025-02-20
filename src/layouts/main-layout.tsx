@@ -1,15 +1,17 @@
 import { Avatar } from "@/components/avatar";
-import Sidebar from "@/components/sidebar";
+import Header from "@/components/header";
+import NavigationBar from "@/components/navigation";
 import { Button } from "@/components/ui/button";
 import { FiPlus } from "react-icons/fi";
 import { Outlet } from "react-router";
 
 const MainLayout = () => {
   return (
-    <main className="min-h-svh  bg-brand-neutral/20">
-      <div className="relative grid items-start md:grid-cols-12 lg:grid-cols-12 gap-5 container mx-auto py-4">
+    <main className="min-h-svh  bg-brand-neutral/20 relative">
+      <Header />
+      <div className="relative grid items-start md:grid-cols-12 lg:grid-cols-12 gap-5 container mx-auto lg:py-4">
         {/* SIDEBAR */}
-        <Sidebar />
+        <NavigationBar />
         {/* MAIN COMPONENT CONTAINER */}
         <div className="rounded-lg lg:col-span-6 md:col-span-9">
           <Outlet />

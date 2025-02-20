@@ -21,6 +21,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 @theme {
-  --color-brand-primary: #4c68d5;
+  --color-brand-primary: oklch(0.769 0.188 70.08);
   --color-brand-neutral: #e2e8f0;
 }

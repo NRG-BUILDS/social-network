@@ -2,6 +2,7 @@ import { FiMessageCircle, FiMoreHorizontal, FiThumbsUp } from "react-icons/fi";
 import { Avatar } from "./avatar";
 import { Link } from "react-router";
 import { Post } from "@/types/post";
+import Container from "./container";
 
 type Props = {
   post: Post;
@@ -9,7 +10,7 @@ type Props = {
 export const PostCard = ({ post }: Props) => {
   return (
     <div className="md:border rounded bg-white">
-      <div className="p-5 flex items-center justify-between">
+      <Container className=" flex items-center justify-between">
         <Avatar
           variant={"lg"}
           img={post.author.avatar}
@@ -24,19 +25,19 @@ export const PostCard = ({ post }: Props) => {
             7 hours ago
           </span>
         </div>
-      </div>
+      </Container>
       <Link to={"/post/post-id"}>
-        <div className="p-5 border-t hover:bg-neutral-100 cursor-pointer">
+        <Container className=" border-t hover:bg-neutral-100 cursor-pointer">
           <p
             className={`${
-              post.images.length === 0 && post.content.length < 40
+              post.images.length === 0 && post.content.length < 90
                 ? "text-2xl"
                 : ""
             }`}
           >
             {post.content}
           </p>
-        </div>
+        </Container>
       </Link>
       {post.images.length > 0 && (
         <div className="div flex flex-wrap gap-0.5 w-full bg-brand-primary/10 h-40">
@@ -45,7 +46,7 @@ export const PostCard = ({ post }: Props) => {
           ))}
         </div>
       )}
-      <div className="p-5 flex items-center justify-between">
+      <Container className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-neutral-500">
           <span className="text-sm text-neutral-400"></span>
           <FiMessageCircle />
@@ -55,7 +56,7 @@ export const PostCard = ({ post }: Props) => {
           <span className="text-sm ">{post.likes} Likes</span>
           <FiThumbsUp />
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

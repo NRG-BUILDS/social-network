@@ -1,4 +1,5 @@
 import { Avatar } from "./avatar";
+import Container from "./container";
 import { Button } from "./ui/button";
 import { FiImage } from "react-icons/fi";
 
@@ -7,7 +8,7 @@ import { FiImage } from "react-icons/fi";
 // }
 const WritePostCard = () => {
   return (
-    <div className="bg-white border rounded p-5 px-6">
+    <Container className="bg-white border rounded ">
       <div className="py-3 flex items-start gap-4">
         <div className="rounded-full min-w-10 size-10 mt-3 bg-gray-400"></div>
         <div className="w-full">
@@ -25,14 +26,14 @@ const WritePostCard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
 export default WritePostCard;
 export const WriteComment = () => {
   return (
-    <div className="bg-white p-5 py-3 px-6">
+    <Container className="bg-white">
       <div className="py-3 flex items-center gap-4">
         <div>
           <Avatar variant={"lg"} />
@@ -45,6 +46,6 @@ export const WriteComment = () => {
           />
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
