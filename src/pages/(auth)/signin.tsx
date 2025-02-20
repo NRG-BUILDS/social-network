@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Link } from "react-router";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -82,14 +83,6 @@ const Signin = () => {
                       required
                     />
                   </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="remember"
-                      className="text-gray-500 dark:text-gray-300"
-                    >
-                      Remember me
-                    </label>
-                  </div>
                 </div>
                 <a
                   href="#"
@@ -106,12 +99,12 @@ const Signin = () => {
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
-                <a
-                  href="/explore"
+                <Link
+                  to="/signup"
                   className="font-medium text-brand-primary hover:underline dark:text-primary-500"
                 >
                   Sign up
-                </a>
+                </Link>
               </p>
             </form>
           </div>
