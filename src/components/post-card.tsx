@@ -12,7 +12,6 @@ export const PostCard = ({ post }: Props) => {
     <div className="md:border rounded bg-white">
       <Container className=" flex items-center justify-between">
         <Avatar
-          variant={"lg"}
           img={post.author.avatar}
           name={post.author.name}
           role={"Software Engineer"}
