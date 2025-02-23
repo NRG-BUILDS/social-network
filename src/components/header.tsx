@@ -1,7 +1,8 @@
 import { Link } from "react-router";
 import Container from "./container";
 import { Avatar } from "./avatar";
-import { FiSettings } from "react-icons/fi";
+import { FiPower, FiSettings, FiUser } from "react-icons/fi";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const Header = () => {
   return (
@@ -13,9 +14,27 @@ const Header = () => {
           </Link>
         </div>
         <div>Logo</div>
-        <Link to={"#"}>
-          <FiSettings />
-        </Link>
+
+        <Popover>
+          <PopoverTrigger className="cursor-pointer">
+            <FiSettings />
+          </PopoverTrigger>
+          <PopoverContent className="w-fit p-0">
+            <div className="grid *:p-3 *:hover:bg-neutral-100">
+              <Link
+                to={"/login"}
+                className="flex items-center gap-3 text-red-500"
+              >
+                <FiPower />
+                <span>Logout</span>
+              </Link>
+              <Link to={"/profile"} className="flex items-center gap-3">
+                <FiUser />
+                <span>Profile</span>
+              </Link>
+            </div>
+          </PopoverContent>
+        </Popover>
       </Container>
     </header>
   );

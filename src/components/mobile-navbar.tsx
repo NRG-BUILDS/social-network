@@ -10,7 +10,7 @@ const MobileNavbar = () => {
     setActiveLink(location.pathname);
   }, [location]);
   return (
-    <div className="fixed bottom-0 left-0 right-0 ">
+    <div className="fixed z-50 bottom-0 left-0 right-0 ">
       <div className="bg-white border-t-2 shadow-lg p-1">
         <div className="flex w-full justify-evenly items-center">
           {routes.map((route) => (

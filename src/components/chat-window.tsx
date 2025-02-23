@@ -95,7 +95,7 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
           </div>
         </section>
       ) : (
-        <div className="h-[80svh] flex w-full items-end">
+        <div className="h-[80lvh] lg:h-[80svh] flex w-full items-end">
           <div className="grid w-full h-[80svh]">
             <div className="pb-5 border-b">
               <Avatar
