@@ -70,7 +70,7 @@ export default Messages;
 
 const ChatItem = () => {
   return (
-    <Container className="hover:bg-neutral-50">
+    <Container className="hover:bg-neutral-50!">
       <div className="flex items-center gap-4">
         <div>
           <Avatar variant={"sm"} />

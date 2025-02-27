@@ -1,30 +1,42 @@
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/logos/logo_blacktext_cube_horizontal.png";
+import useRequest from "@/hooks/useRequest";
+import { toast } from "sonner";
+import { LucideLoader2 } from "lucide-react";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     termsAgreement: false,
   });
+  const { loading, makeRequest } = useRequest("/auth/register", false);
+  const nav = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  const handleSubmit = (e: React.FormEvent) => {
-    console.log(form);
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const res = await makeRequest(form, "POST");
+    if (res.status === "success") {
+      toast("Account created successfully!");
+      setTimeout(() => {
+        nav(`/verify/${res.data?.email}`);
+      }, 1000);
+    }
   };
 
   return (
-    <section className="bg-neutral-50 h-screen">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        {/* LOGO GOES HERE!!!! */}
+    <section className="bg-neutral-50 min-h-screen">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:min-h-screen lg:py-0">
+        <img src={logo} alt="" className="w-auto h-[60px] my-4" />
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -163,9 +175,14 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={!form.termsAgreement}
-                className="disabled:opacity-50 w-full text-white bg-brand-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-brand-primary dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="relative overflow-clip disabled:opacity-50 w-full text-white bg-brand-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-brand-primary dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Sign up
+                {loading && (
+                  <div className="flex items-center justify-center w-full h-full absolute left-0 top-0 bg-inherit">
+                    <LucideLoader2 className="animate-spin" />
+                  </div>
+                )}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already got an account?{" "}

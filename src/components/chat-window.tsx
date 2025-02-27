@@ -84,7 +84,7 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
   return (
     <>
       {isEmpty ? (
-        <section className="min-h-[80svh] flex items-center justify-center">
+        <section className=" min-h-[80svh] flex items-center justify-center">
           <div className="flex flex-col items-center text-center gap-2">
             <FiInbox size={76} className="text-neutral-400" />
             <h2 className="font-semibold text-neutral-900">Your messages</h2>
@@ -95,8 +95,8 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
           </div>
         </section>
       ) : (
-        <div className="h-[80lvh] lg:h-[80svh] flex w-full items-end">
-          <div className="grid w-full h-[80svh]">
+        <div className="flex w-full items-end">
+          <div className="grid w-full ">
             <div className="pb-5 border-b">
               <Avatar
                 name={"David Adams"}
@@ -104,7 +104,7 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
                 role="Last seen: 21:00"
               />
             </div>
-            <ScrollArea>
+            <ScrollArea className="h-[70svh] lg:h-[65svh]">
               {response.messages.map((msg, index) => (
                 <div
                   className={`flex w-full gap-2 ${

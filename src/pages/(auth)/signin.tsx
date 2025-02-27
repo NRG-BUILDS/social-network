@@ -1,23 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import logo from "@/assets/logos/logo_blacktext_cube_horizontal.png";
+import useRequest from "@/hooks/useRequest";
+import { LucideLoader2 } from "lucide-react";
+import { toast } from "sonner";
+import { login } from "@/store/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { loading, error, makeRequest } = useRequest("/auth/login", false);
   const [form, setForm] = useState({ email: "", password: "" });
+  const nav = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (error) {
+      toast("Invalid login credentials");
+    }
+  }, [error]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     console.log(form);
     e.preventDefault();
+    const res = await makeRequest(form, "POST");
+    if (res.status === "success") {
+      const payload = {
+        token: res.data.access,
+        refresh: res.data.refresh,
+        user: null,
+      };
+      dispatch(login(payload));
+      //navigate to previous page (if stored) or to profile if not
+      const from = location.state?.from || "/home";
+      nav(from);
+    } else {
+      toast(res.message);
+    }
   };
 
   return (
     <section className="bg-neutral-50 h-screen">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="flex flex-col items-center justify-center px-3 py-8 mx-auto md:h-screen lg:py-0">
+        <img src={logo} alt="" className="w-auto h-[60px] my-4" />
         {/* LOGO GOES HERE!!!! */}
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -81,9 +113,15 @@ const Signin = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-brand-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-brand-primary dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                disabled={loading}
+                className="relative disabled:opacity-50 overflow-clip w-full text-white bg-brand-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-brand-primary dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Sign in
+                {loading && (
+                  <div className="flex items-center justify-center w-full h-full absolute left-0 top-0 bg-inherit">
+                    <LucideLoader2 className="animate-spin" />
+                  </div>
+                )}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
