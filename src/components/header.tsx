@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import Container from "./container";
-import { Avatar } from "./avatar";
+import { MyAvatar } from "./avatar";
 import { FiPower, FiSettings, FiUser } from "react-icons/fi";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import logo from "@/assets/logos/logo_g.png";
@@ -11,7 +11,7 @@ const Header = () => {
       <Container className="!py-2 grid grid-cols-12 *:flex justify-center items-center w-full mx-auto container">
         <div className="col-span-3 justify-left">
           <Link to={"/profile"}>
-            <Avatar img="https://i.pravatar.cc/150?img=5" variant={"xs"} />
+            <MyAvatar variant={"xs"} />
           </Link>
         </div>
         <div className="col-span-6 justify-center">

@@ -19,7 +19,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (error) {
-      toast("Invalid login credentials");
+      toast.error("Invalid login credentials");
     }
   }, [error]);
 
@@ -35,6 +35,7 @@ const Signin = () => {
       const payload = {
         token: res.data.access,
         refresh: res.data.refresh,
+        email: form.email,
         user: null,
       };
       dispatch(login(payload));

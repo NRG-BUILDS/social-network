@@ -16,6 +16,7 @@ const MobileNavbar = () => {
           {routes.map((route) => (
             <Link
               to={route.path}
+              key={route.label}
               data-state={
                 activeLink.includes(route.path) ? "active" : "inactive"
               }
