@@ -86,21 +86,23 @@ export const WriteComment = ({
     setComment("");
   };
   return (
-    <Container className="bg-white">
-      <div className="py-3 flex items-center gap-4">
-        <div>
-          <MyAvatar variant={"lg"} />
+    <Container className="bg-white border-t">
+      <div className="py-3 flex items-start lg:items-center gap-4">
+        <div className="">
+          <MyAvatar variant={"base"} />
         </div>
-        <div className="w-full flex items-center border rounded *:focus:border-brand-primary transition p-3">
+        <div className="w-full flex flex-col md:flex-row gap-4 lg:items-center items-end lg:border rounded *:focus:border-brand-primary transition md:p-3">
           <input
             type="text"
             value={comment}
             onChange={handleChange}
             placeholder="Share your thoughts here..."
-            className="w-full outline-0 transition"
+            className="w-full  focus:ring-green-500 border p-2 transition"
           />
           <Button
             loading={loading}
+            data-state={comment.trim() ? "inactive" : "active"}
+            className="data-[state=active]:!sr-only transition-all"
             disabled={!comment.trim()}
             onClick={handleClick}
           >

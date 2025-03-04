@@ -10,10 +10,10 @@ const MainLayout = () => {
     <main className="min-h-svh  bg-brand-neutral/20 relative">
       <Header />
       <div className="relative grid items-start md:grid-cols-12 lg:grid-cols-12 gap-5 container mx-auto lg:py-4">
-        {/* SIDEBAR */}
+        {/* SIDEBAR & BOTTOM NAV (FOR MOBILE) */}
         <NavigationBar />
         {/* MAIN COMPONENT CONTAINER */}
-        <div className="rounded-lg lg:col-span-6 md:col-span-9">
+        <div className="rounded-lg lg:col-span-6 md:col-span-9 mb-20">
           <Outlet />
         </div>
 
