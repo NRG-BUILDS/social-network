@@ -1,9 +1,9 @@
 import useRequest from "@/hooks/useRequest";
-import { Avatar } from "./avatar";
+import { MyAvatar } from "./avatar";
 import Container from "./container";
 import { Button } from "./ui/button";
 import { FiImage } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // interface PostCardProps {
@@ -68,19 +68,44 @@ const WritePostCard = () => {
 };
 
 export default WritePostCard;
-export const WriteComment = () => {
+
+export const WriteComment = ({
+  onCommentClick,
+  loading,
+}: {
+  onCommentClick: (e: string) => void;
+  loading: boolean;
+}) => {
+  const [comment, setComment] = useState<string>("");
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setComment(value);
+  };
+  const handleClick = () => {
+    onCommentClick(comment);
+    setComment("");
+  };
   return (
     <Container className="bg-white">
       <div className="py-3 flex items-center gap-4">
         <div>
-          <Avatar variant={"lg"} />
+          <MyAvatar variant={"lg"} />
         </div>
-        <div className="w-full">
+        <div className="w-full flex items-center border rounded *:focus:border-brand-primary transition p-3">
           <input
             type="text"
+            value={comment}
+            onChange={handleChange}
             placeholder="Share your thoughts here..."
-            className="w-full border rounded outline-0 focus:border-brand-primary transition p-3"
+            className="w-full outline-0 transition"
           />
+          <Button
+            loading={loading}
+            disabled={!comment.trim()}
+            onClick={handleClick}
+          >
+            Reply
+          </Button>
         </div>
       </div>
     </Container>

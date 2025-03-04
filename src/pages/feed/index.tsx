@@ -1,3 +1,4 @@
+import { LoadingScreen } from "@/components/loader";
 import { PostCard } from "@/components/post-card";
 import WritePostCard from "@/components/write-post";
 import useRequest from "@/hooks/useRequest";
@@ -36,9 +37,7 @@ const Feed = () => {
   return (
     <section>
       <WritePostCard />
-      {(loading || error) && (
-        <div className="flex items-center justify-center h-64">Loaing...</div>
-      )}
+      {(loading || error) && <LoadingScreen loading={loading} error={error} />}
       {data && (
         <div className="space-y-4 my-4">
           {data.data.posts.map((post: PostType, i: number) => (

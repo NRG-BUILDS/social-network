@@ -3,8 +3,11 @@ import { Avatar } from "./avatar";
 import { Link } from "react-router";
 import { Post } from "@/types/post";
 import Container from "./container";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import { friendlyTime } from "@/lib/helperFunctions";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import useRequest from "@/hooks/useRequest";
+import { LucideLoader2 } from "lucide-react";
 
 type Props = {
   post: Post;
@@ -24,7 +27,7 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
             <FiMoreHorizontal />
           </button>
           <span className="text-neutral-500 whitespace-nowrap hidden md:block">
-            7 hours ago
+            {friendlyTime(post.createdAt)}
           </span>
         </div>
       </Container>
@@ -50,11 +53,13 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
           <FiMessageCircle />
           <span className="text-sm ">{post.commentsCount} Comments</span>
         </div>
-        <ReactionButton>
-          <div className="flex items-center gap-2 text-neutral-500">
-            <span className="text-sm ">{post.reactionsCount} Reactions</span>
-            <FiThumbsUp />
-          </div>
+        <ReactionButton slug={post.slug}>
+          {
+            <div className="flex items-center gap-2 text-neutral-500">
+              <span className="text-sm ">{post.reactionsCount} Reactions</span>
+              <FiThumbsUp />
+            </div>
+          }
         </ReactionButton>
       </Container>
     </div>
@@ -63,19 +68,41 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
 
 interface ReactionButtonProps {
   children: ReactNode;
+  slug: string;
 }
-export const ReactionButton = ({ children }: ReactionButtonProps) => {
+export const ReactionButton = ({ children, slug }: ReactionButtonProps) => {
+  const [openTray, setOpenTray] = useState(false);
+  const { loading, makeRequest } = useRequest(`/feed/reactions/${slug}`);
+
+  const addReaction = async (
+    rType: "LOVE" | "WOW" | "ANGRY" | "HAHA" | "LIKE" | "SAD"
+  ) => {
+    setOpenTray(false);
+    const res = await makeRequest({ rType: rType }, "POST");
+    if (res.status === "success") {
+    }
+  };
   return (
-    <HoverCard>
-      <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className="rounded-full">
-        <div className="flex gap-2">
-          <div className="rounded-full size-10 bg-brand-primary" />
-          <div className="rounded-full size-10 bg-brand-primary" />
-          <div className="rounded-full size-10 bg-brand-primary" />
-          <div className="rounded-full size-10 bg-brand-primary" />
+    <Popover open={openTray} onOpenChange={setOpenTray}>
+      <PopoverTrigger className="cursor-pointer">
+        {!loading ? (
+          children
+        ) : (
+          <span>
+            <LucideLoader2 className="animate-spin text-brand-primary" />
+          </span>
+        )}
+      </PopoverTrigger>
+      <PopoverContent className="rounded-full">
+        <div className="flex gap-2 text-3xl *:hover:scale-200">
+          <button onClick={() => addReaction("LIKE")}>👍</button>
+          <button onClick={() => addReaction("LOVE")}>💖</button>
+          <button onClick={() => addReaction("HAHA")}>😂</button>
+          <button onClick={() => addReaction("WOW")}>😲</button>
+          <button onClick={() => addReaction("SAD")}>😢</button>
+          <button onClick={() => addReaction("ANGRY")}>😠</button>
         </div>
-      </HoverCardContent>
-    </HoverCard>
+      </PopoverContent>
+    </Popover>
   );
 };

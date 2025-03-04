@@ -67,7 +67,7 @@ export const MyAvatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     return (
       <div className="flex w-full items-center justify-start gap-4">
         <div className={cn(avatarSizes({ variant, size, className }))}>
-          {user ? (
+          {user?.avatarUrl ? (
             <img
               src={user?.avatarUrl || undefined}
               alt={name}

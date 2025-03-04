@@ -1,81 +1,56 @@
-import useRequest from "@/hooks/useRequest";
-
 export function formatToCurrency(amount: number | string) {
   if (!Number(amount)) return "--";
 
   return `₦${amount.toLocaleString("en-NG")}`;
 }
-export function formatTimestamp(timestamp: null | string): string {
-  if (!timestamp) {
-    return "";
+
+export function friendlyTime(timestamp: string): string {
+  const date: Date = new Date(timestamp);
+
+  // Validate the date
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
   }
-  const date = new Date(timestamp);
 
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const now: Date = new Date();
+  let diff: number = (now.getTime() - date.getTime()) / 1000; // difference in seconds
 
-  const dayOfWeek = daysOfWeek[date.getUTCDay()];
-  const day = date.getUTCDate();
-  const month = months[date.getUTCMonth()];
-  const year = date.getUTCFullYear();
+  // If the event is in the future, treat it as "Just now"
+  if (diff < 0) {
+    diff = 0;
+  }
 
-  const hours = date.getUTCHours().toString().padStart(2, "0");
-  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
-
-  // Get the ordinal suffix for the day of the month
-  const ordinalSuffix = (n: number) => {
-    const s = ["th", "st", "nd", "rd"],
-      v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
-  };
-
-  return `${dayOfWeek}, ${ordinalSuffix(
-    day
-  )} ${month} ${year}, ${hours}:${minutes}`;
-}
-export function timeAgo(timestamp: number | string): string {
-  const now = new Date().getTime();
-  const past =
-    typeof timestamp === "string" ? new Date(timestamp).getTime() : timestamp;
-  const diff = now - past;
-
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const weeks = Math.floor(days / 7);
-  const months = Math.floor(days / 30);
-  const years = Math.floor(days / 365);
-
-  if (seconds < 60) {
-    return `${seconds} seconds ago`;
-  } else if (minutes < 60) {
-    return `${minutes} minutes ago`;
-  } else if (hours < 24) {
-    return `${hours} hours ago`;
-  } else if (days < 7) {
-    return `${days} days ago`;
-  } else if (weeks < 4) {
-    return `${weeks} weeks ago`;
-  } else if (months < 12) {
-    return `${months} months ago`;
+  if (diff < 60) {
+    return "Just now";
+  } else if (diff < 3600) {
+    const mins: number = Math.floor(diff / 60);
+    return `${mins} ${mins === 1 ? "min" : "mins"} ago`;
+  } else if (diff < 86400) {
+    const hours: number = Math.floor(diff / 3600);
+    return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
   } else {
-    return `${years} years ago`;
+    // For dates older than a day, format as "D MMM YY" (e.g., "24 Feb 24")
+    const day: number = date.getDate();
+    const months: string[] = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month: string = months[date.getMonth()];
+    const year: string = date.getFullYear().toString().slice(-2);
+    return `${day} ${month} ${year}`;
   }
 }
+
 export function convertToFormData(obj: Record<string, any>): FormData {
   let data = Object.keys(obj).reduce((fd, k) => {
     const value =

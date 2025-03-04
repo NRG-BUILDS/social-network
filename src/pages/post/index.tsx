@@ -13,10 +13,30 @@ import { useParams } from "react-router";
 
 const Post = () => {
   const [post, setPost] = useState<Post | null>(null);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const { slug } = useParams();
   const { data, loading, error, makeRequest } = useRequest(
     `/feed/posts/${slug}`
   );
+  const {
+    data: commentRes,
+    loading: commentLoad,
+    error: commentError,
+    makeRequest: makeCommentRequest,
+  } = useRequest(`/feed/posts/${slug}/comments`);
+  const { makeRequest: makeCommentPost } = useRequest(
+    `/feed/posts/${slug}/comments`
+  );
+
+  useEffect(() => {
+    makeRequest();
+    makeCommentRequest();
+  }, []);
+  useEffect(() => {
+    if (commentRes) {
+      setComments([...commentRes.data.comments]);
+    }
+  }, [commentRes]);
 
   useEffect(() => {
     if (!data) {
@@ -25,6 +45,16 @@ const Post = () => {
       setPost({ ...data.data });
     }
   }, [data]);
+
+  const addComment = async (comment: string) => {
+    if (!comment.trim()) {
+      return;
+    }
+    const res = await makeCommentPost({ text: comment }, "POST");
+    if (res.status === "success") {
+      setComments([res.data, ...comments]);
+    }
+  };
 
   if (loading || error) {
     return <div>Loading screen goes here...</div>;
@@ -41,8 +71,12 @@ const Post = () => {
           </BackButton>
         </div>
         <PostCard post={post} unClickable />
-        <WriteComment />
-        <CommentSection postSlug={slug || ""} />
+        <WriteComment onCommentClick={addComment} loading={commentLoad} />
+        <CommentSection
+          comments={comments}
+          loading={commentLoad}
+          error={commentError}
+        />
       </main>
     );
   }
@@ -51,24 +85,12 @@ const Post = () => {
 export default Post;
 
 type Props = {
-  postSlug: string;
+  comments: CommentType[] | null;
+  loading: boolean;
+  error: Error | null;
 };
-export const CommentSection = ({ postSlug }: Props) => {
-  const [comments, setComments] = useState<CommentType[] | null>(null);
-  const { slug } = useParams();
-  const { data, loading, error, makeRequest } = useRequest(
-    `/feed/posts/${postSlug}/comments`
-  );
-
-  useEffect(() => {
-    if (!data) {
-      makeRequest();
-    } else {
-      setComments([...data.data.comments]);
-    }
-  }, [data]);
-
-  if (loading || error) {
+export const CommentSection = ({ comments, loading, error }: Props) => {
+  if (!comments && (loading || error)) {
     return (
       <div className="flex items-center justify-center w-full py-5">
         <LucideLoader2 className="animate-spin text-brand-primary" />
