@@ -119,7 +119,7 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
                   <div className="flex items-start">
                     {msg.senderId !== myId && (
                       <div>
-                        <Avatar />
+                        <Avatar variant={"xs"} />
                       </div>
                     )}
                   </div>
@@ -138,13 +138,13 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
                   </div>
                   {msg.senderId === myId && (
                     <div>
-                      <Avatar />
+                      <Avatar variant={"xs"} />
                     </div>
                   )}
                 </div>
               ))}
             </ScrollArea>
-            <Container className="!p-0 !pt-1 w-full bg-white">
+            <Container className="z-[99] !p-0 !pt-1 w-full bg-white">
               <div className="w-full flex border rounded-lg items-center">
                 <input
                   type="text"
