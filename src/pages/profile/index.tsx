@@ -1,7 +1,7 @@
 import Feed from "../feed";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/ui/button";
-import { FiEdit, FiEdit2, FiEdit3, FiPlus } from "react-icons/fi";
+import { FiEdit3, FiPlus } from "react-icons/fi";
 import useRequest from "@/hooks/useRequest";
 
 import Container from "@/components/container";
