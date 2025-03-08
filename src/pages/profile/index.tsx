@@ -1,13 +1,13 @@
 import Feed from "../feed";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/ui/button";
-import { FiPlus } from "react-icons/fi";
+import { FiEdit, FiEdit2, FiEdit3, FiPlus } from "react-icons/fi";
 import useRequest from "@/hooks/useRequest";
 
 import Container from "@/components/container";
 import { LoadingScreen } from "@/components/loader";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { User } from "@/types/user";
@@ -19,8 +19,13 @@ const Profile = () => {
   const { data, loading, error, makeRequest } = useRequest(
     `/profiles/profile/${usernameParam || username || ""}`
   );
+  const nav = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (username === usernameParam) {
+      nav("/profile");
+      return;
+    }
     makeRequest();
   }, []);
   useEffect(() => {
@@ -38,19 +43,26 @@ const Profile = () => {
           <Container className="flex flex-col lg:flex-row text-center lg:text-left py-20 items-center justify-center gap-y-10 lg:justify-between">
             <div className="flex flex-col lg:flex-row items-center gap-4">
               <div>
-                <Avatar variant={"2xl"} img="https://i.pravatar.cc/150?img=5" />
+                <Avatar variant={"2xl"} img={profileData.avatarUrl} />
               </div>
               <div>
                 <p className="font-semibold text-xl flex flex-col lg:flex-row gap-1">
-                  <span>
-                    {profileData.firstName + " " + profileData.lastName}
+                  <span className="flex items-center gap-1.5">
+                    <span>
+                      {profileData.firstName + " " + profileData.lastName}
+                    </span>
+                    <button className="text-brand-primary p-1 rounded-lg shadow-xl active:bg-brand-primary active:text-white">
+                      <FiEdit3 />
+                    </button>
                   </span>
-                  <span className="text-neutral-500 font-light hidden lg:block">
-                    /
-                  </span>
-                  <span className="text-neutral-500 font-light">
-                    @{profileData.username}
-                  </span>
+                  <p>
+                    <span className="text-neutral-500 font-light hidden lg:block">
+                      /
+                    </span>
+                    <span className="text-neutral-500 font-light">
+                      @{profileData.username}
+                    </span>
+                  </p>
                 </p>
                 <span>{profileData.bio}</span>
               </div>
