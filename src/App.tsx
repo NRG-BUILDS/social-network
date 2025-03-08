@@ -16,20 +16,20 @@ import { AppDispatch, RootState } from "./store/store";
 import useRequest from "./hooks/useRequest";
 import { setUser } from "./store/authSlice";
 import { User } from "./types/user";
+import Profile from "./pages/profile";
 
 function App() {
-  const { email, isAuthenticated } = useSelector(
+  const { username, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
   );
   const dispatch = useDispatch<AppDispatch>();
   const { makeRequest } = useRequest("");
-  const getUserProfile = async (email: string) => {
-    console.log("signed in with", email);
+  const getUserProfile = async (username: string) => {
     const res = await makeRequest(
       undefined,
       undefined,
       undefined,
-      `/profiles/profile/emmanuel-omolaju` //replace this with dynamic value from the login response later
+      `/profiles/profile/${username}` //replace this with dynamic value from the login response later
     );
     if (res.status === "success") {
       let user: User = res.data;
@@ -40,10 +40,10 @@ function App() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && email) {
-      getUserProfile(email);
+    if (isAuthenticated && username) {
+      getUserProfile(username);
     }
-  }, [isAuthenticated, email]);
+  }, [isAuthenticated, username]);
   return (
     <>
       <Toaster />
@@ -63,7 +63,7 @@ function App() {
           <Route path="/messages/:chatId" element={<Chat />}></Route>
         </Route>
         <Route element={<ProfileLayout />}>
-          <Route path="/profile" element={<Feed />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
         </Route>
       </Routes>
     </>

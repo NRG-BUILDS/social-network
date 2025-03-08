@@ -32,7 +32,7 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
         </div>
       </Container>
       <Link to={unClickable ? "#" : `/post/${post.slug}`}>
-        <Container className=" border-t hover:bg-neutral-100 cursor-pointer">
+        <Container className=" border-t hover:bg-neutral-50 cursor-pointer">
           <p
             className={`${
               !post.imageUrl && post.text.length < 90 ? "text-2xl" : ""
@@ -55,7 +55,7 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
         </div>
         <ReactionButton slug={post.slug}>
           {
-            <div className="flex items-center gap-2 text-neutral-500">
+            <div className="flex items-center gap-2 text-neutral-500 hover:text-blue-400 transition-all">
               <span className="text-sm ">{post.reactionsCount} Reactions</span>
               <FiThumbsUp />
             </div>

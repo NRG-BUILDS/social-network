@@ -7,14 +7,16 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { generateThumbnail } from "@/lib/helperFunctions";
 import { LuX } from "react-icons/lu";
+import { uploadImage } from "@/lib/imageUpload";
 
 interface FormType {
   text: string | null;
   fileType: string | null;
 }
+
 const WritePostCard = () => {
   const [form, setForm] = useState<FormType>({ text: null, fileType: null });
-  const [_, setFile] = useState<File | null>();
+  const [file, setFile] = useState<File | null>();
   const { loading, error, makeRequest } = useRequest("/feed/posts");
 
   useEffect(() => {
@@ -63,8 +65,25 @@ const WritePostCard = () => {
       fileType: form.fileType,
     };
     const res = await makeRequest(body, "POST");
-    if (res) {
+    if (res.status === "success") {
       console.log(res);
+      if (form.fileType && file) {
+        const { publicId, signature, timestamp } = res.data.fileUploadData;
+        console.log(publicId, timestamp);
+        const imageUpload = await uploadImage(
+          file,
+          publicId,
+          signature,
+          timestamp
+        );
+        if (imageUpload) {
+          toast.success("Post uploaded successfully");
+        } else {
+          toast.error("Failed to create post");
+        }
+      } else {
+        toast.success("Post uploaded successfully");
+      }
       setForm({ text: null, fileType: null });
     }
   };

@@ -35,6 +35,7 @@ const Signin = () => {
       const payload = {
         token: res.data.access,
         refresh: res.data.refresh,
+        username: res.data.username,
         email: form.email,
         user: null,
       };

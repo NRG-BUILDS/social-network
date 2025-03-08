@@ -124,10 +124,10 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
                     )}
                   </div>
                   <div
-                    className={`p-5 rounded-xl w-fit max-w-[420px] relative ${
+                    className={`p-3 text-sm rounded-xl w-fit max-w-[270px] relative ${
                       msg.senderId === myId
-                        ? "bg-brand-primary text-white"
-                        : "bg-brand-primary/20 "
+                        ? "bg-brand-primary text-white rounded-tr-none "
+                        : "bg-brand-primary/20 rounded-tl-none "
                     }`}
                   >
                     {msg.content}
@@ -136,11 +136,6 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
                       <FiCheck />
                     </div>
                   </div>
-                  {msg.senderId === myId && (
-                    <div>
-                      <Avatar variant={"xs"} />
-                    </div>
-                  )}
                 </div>
               ))}
             </ScrollArea>
