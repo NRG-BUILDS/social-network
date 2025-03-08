@@ -13,11 +13,11 @@ import { RootState } from "@/store/store";
 import { User } from "@/types/user";
 
 const Profile = () => {
-  const { query } = useParams();
+  const { usernameParam } = useParams();
   const [profileData, setProfileData] = useState<null | User>(null);
   const username = useSelector((state: RootState) => state.auth.username);
   const { data, loading, error, makeRequest } = useRequest(
-    `/profiles/profile/${query || username || ""}`
+    `/profiles/profile/${usernameParam || username || ""}`
   );
 
   useEffect(() => {

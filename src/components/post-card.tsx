@@ -17,11 +17,13 @@ export const PostCard = ({ post, unClickable = false }: Props) => {
   return (
     <div className="md:border rounded bg-white">
       <Container className="text-sm md:text-base flex items-center justify-between">
-        <Avatar
-          img={post.author.avatarUrl}
-          name={post.author.name}
-          role={"Software Engineer"}
-        />
+        <Link to={`/profile/${post.author.username}`}>
+          <Avatar
+            img={post.author.avatarUrl}
+            name={post.author.name}
+            role={"Software Engineer"}
+          />
+        </Link>
         <div className="text-right flex flex-col items-end">
           <button>
             <FiMoreHorizontal />

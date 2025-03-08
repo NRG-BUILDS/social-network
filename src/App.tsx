@@ -64,6 +64,7 @@ function App() {
         </Route>
         <Route element={<ProfileLayout />}>
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/profile/:usernameParam" element={<Profile />}></Route>
         </Route>
       </Routes>
     </>
