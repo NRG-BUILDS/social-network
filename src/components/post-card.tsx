@@ -16,7 +16,7 @@ type Props = {
 export const PostCard = ({ post, unClickable = false }: Props) => {
   return (
     <div className="md:border rounded bg-white">
-      <Container className=" flex items-center justify-between">
+      <Container className="text-sm md:text-base flex items-center justify-between">
         <Avatar
           img={post.author.avatarUrl}
           name={post.author.name}

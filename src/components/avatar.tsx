@@ -43,7 +43,7 @@ export interface AvatarProps
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, variant, size, name, role, img }) => {
     return (
-      <div className="flex w-full items-center justify-start gap-4">
+      <div className="flex w-full items-center justify-start gap-2 md:gap-4">
         <div className={cn(avatarSizes({ variant, size, className }))}>
           {img ? (
             <img src={img} alt={name} className="size-full object-cover" />
