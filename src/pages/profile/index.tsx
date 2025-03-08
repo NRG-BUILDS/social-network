@@ -51,9 +51,11 @@ const Profile = () => {
                     <span>
                       {profileData.firstName + " " + profileData.lastName}
                     </span>
-                    <button className="text-brand-primary p-1 rounded-lg shadow-xl active:bg-brand-primary active:text-white">
-                      <FiEdit3 />
-                    </button>
+                    {!usernameParam && (
+                      <button className="text-brand-primary p-1 rounded-lg shadow-xl active:bg-brand-primary active:text-white">
+                        <FiEdit3 />
+                      </button>
+                    )}
                   </span>
                   <p>
                     <span className="text-neutral-500 font-light hidden lg:block">
