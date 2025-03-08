@@ -47,7 +47,7 @@ const Profile = () => {
               </div>
               <div>
                 <p className="font-semibold text-xl flex flex-col lg:flex-row gap-1">
-                  <span className="flex items-center gap-1.5">
+                  <span className="flex items-center justify-center gap-1.5">
                     <span>
                       {profileData.firstName + " " + profileData.lastName}
                     </span>
