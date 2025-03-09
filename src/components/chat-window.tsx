@@ -2,9 +2,12 @@ import { FiCheck, FiInbox, FiSend } from "react-icons/fi";
 import { Avatar } from "./avatar";
 import Container from "./container";
 import { ScrollArea } from "./ui/scroll-area";
+import { useState } from "react";
+import { Message } from "@/types/chats";
 
 type ChatWindowProps = {
-  chats?: any[];
+  chats?: Message[];
+  handleSend: (text: string) => void;
 };
 
 const response = {
@@ -78,8 +81,27 @@ const response = {
   ],
 };
 
-export const ChatWindow = ({ chats }: ChatWindowProps) => {
-  const myId = "user_001";
+function formatTimestamp(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const isSameDay = date.toDateString() === now.toDateString();
+
+  if (isSameDay) {
+    return date.toTimeString().slice(0, 5); // "18:35"
+  } else {
+    return date.toLocaleString("en-US", {
+      weekday: "short", // "Sun"
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24-hour format
+    }); // "Sun, 18:25"
+  }
+}
+
+export const ChatWindow = ({ chats, handleSend }: ChatWindowProps) => {
+  const myId = "emmanuel-omolaju";
+
+  const [text, setText] = useState("");
   return (
     <>
       {!chats ? (
@@ -101,18 +123,7 @@ export const ChatWindow = ({ chats }: ChatWindowProps) => {
               No messages here yet. Start a new conversation.
             </p>
 
-            <Container className="w-full bg-white">
-              <div className="w-full flex border rounded-lg items-center">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="p-3 w-full"
-                />
-                <button className="p-3">
-                  <FiSend size={24} className="text-neutral-400" />
-                </button>
-              </div>
-            </Container>
+            <InputBox text={text} setText={setText} onSend={handleSend} />
           </div>
         </section>
       ) : (
@@ -126,55 +137,82 @@ export const ChatWindow = ({ chats }: ChatWindowProps) => {
               />
             </div>
             <ScrollArea className="h-[70svh] lg:h-[65svh]">
-              {response.messages.map((msg, index) => (
+              {chats.map((msg, index) => (
                 <div
                   className={`flex w-full gap-2 ${
-                    msg.senderId === myId ? "justify-end " : "justify-start"
+                    msg.sender.username === myId
+                      ? "justify-end "
+                      : "justify-start"
                   } ${
                     index !== 0 &&
-                    msg.senderId === response.messages[index - 1].senderId
+                    msg.sender.username ===
+                      response.messages[index - 1].senderId
                       ? " mt-1 "
                       : " mt-4"
                   }`}
                 >
                   <div className="flex items-start">
-                    {msg.senderId !== myId && (
+                    {msg.sender.username !== myId && (
                       <div>
                         <Avatar variant={"xs"} />
                       </div>
                     )}
                   </div>
-                  <div
-                    className={`p-3 text-sm rounded-xl w-fit max-w-[270px] relative ${
-                      msg.senderId === myId
-                        ? "bg-brand-primary text-white rounded-tr-none "
-                        : "bg-brand-primary/20 rounded-tl-none "
-                    }`}
-                  >
-                    {msg.content}
-                    <div className="absolute bottom-2 right-2 flex text-xs w-full justify-end items-center gap-1 text-right">
-                      <span>22:50</span>
+                  <div>
+                    <div
+                      className={`p-3 text-sm rounded-xl w-fit max-w-[270px] relative ${
+                        msg.sender.username === myId
+                          ? "bg-brand-primary text-white rounded-tr-none "
+                          : "bg-brand-primary/20 rounded-tl-none "
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    <div className="mt-1 opacity-50 flex text-xs w-full justify-end items-center gap-1 text-right">
+                      <span>{formatTimestamp(msg.updatedAt)}</span>
                       <FiCheck />
                     </div>
                   </div>
                 </div>
               ))}
             </ScrollArea>
-            <Container className="z-[99] !p-0 !pt-1 w-full bg-white">
-              <div className="w-full flex border rounded-lg items-center">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="p-3 w-full"
-                />
-                <button className="p-3">
-                  <FiSend size={24} className="text-neutral-400" />
-                </button>
-              </div>
-            </Container>
+            <InputBox text={text} setText={setText} onSend={handleSend} />
           </div>
         </div>
       )}
     </>
   );
 };
+
+type InputBoxProps = {
+  text: string;
+  setText: (text: string) => void;
+  onSend: (text: string) => void;
+};
+const InputBox = ({ text, setText, onSend }: InputBoxProps) => {
+  return (
+    <Container className="z-[99] !p-0 !pt-1 w-full bg-white">
+      <div className="w-full flex border rounded-lg items-center">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          className="p-3 w-full"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button
+          onClick={() => onSend(text)}
+          disabled={!text.trim()}
+          className="p-3"
+        >
+          <FiSend
+            size={24}
+            className="text-brand-primary disabled:text-neutral-400"
+          />
+        </button>
+      </div>
+    </Container>
+  );
+};
+
+export default InputBox;

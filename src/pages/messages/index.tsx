@@ -60,7 +60,7 @@ const Messages = () => {
           </div>
           <div className="lg:col-span-8">
             <Container>
-              <ChatWindow />
+              <ChatWindow chats={[]} handleSend={(t) => console.log(t)} />
             </Container>
           </div>
         </div>
@@ -75,7 +75,7 @@ const Messages = () => {
         <div className="border-t grid lg:grid-cols-12 divide-x">
           <div className="lg:col-span-4 relative min-h-[80svh]">
             {chats.map((chat, i) => (
-              <Link to={"/messages/3"} key={i}>
+              <Link to={`/messages/${chat.id}`} key={i}>
                 <ChatItem chat={chat} />
               </Link>
             ))}

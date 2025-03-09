@@ -21,3 +21,26 @@ export type Chat = {
   createdAt: string;
   updatedAt: string;
 };
+
+interface Sender {
+  name: string;
+  username: string;
+  avatarUrl: string;
+}
+
+interface FileUploadData {
+  publicId: string;
+  signature: string;
+  timestamp: string;
+}
+
+export interface Message {
+  id: string;
+  chatId: string;
+  sender: Sender;
+  text: string;
+  fileUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+  fileUploadData?: FileUploadData;
+}
