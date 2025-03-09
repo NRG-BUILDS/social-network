@@ -1,11 +1,10 @@
 import { FiCheck, FiInbox, FiSend } from "react-icons/fi";
-import { Button } from "./ui/button";
 import { Avatar } from "./avatar";
 import Container from "./container";
 import { ScrollArea } from "./ui/scroll-area";
 
 type ChatWindowProps = {
-  isEmpty?: boolean;
+  chats?: any[];
 };
 
 const response = {
@@ -79,11 +78,11 @@ const response = {
   ],
 };
 
-export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
+export const ChatWindow = ({ chats }: ChatWindowProps) => {
   const myId = "user_001";
   return (
     <>
-      {isEmpty ? (
+      {!chats ? (
         <section className=" min-h-[80svh] flex items-center justify-center">
           <div className="flex flex-col items-center text-center gap-2">
             <FiInbox size={76} className="text-neutral-400" />
@@ -91,7 +90,29 @@ export const ChatWindow = ({ isEmpty = false }: ChatWindowProps) => {
             <p className="text-neutral-500">
               Select a person to display their chat or start a new conversation.
             </p>
-            <Button className="mt-2">New Message</Button>
+          </div>
+        </section>
+      ) : !chats.length ? (
+        <section className=" min-h-[80svh] flex items-center justify-center">
+          <div className="flex flex-col items-center text-center gap-2">
+            <span className="text-8xl">👋</span>
+            <h2 className="font-semibold text-neutral-900">Say hello</h2>
+            <p className="text-neutral-500">
+              No messages here yet. Start a new conversation.
+            </p>
+
+            <Container className="w-full bg-white">
+              <div className="w-full flex border rounded-lg items-center">
+                <input
+                  type="text"
+                  placeholder="Type a message..."
+                  className="p-3 w-full"
+                />
+                <button className="p-3">
+                  <FiSend size={24} className="text-neutral-400" />
+                </button>
+              </div>
+            </Container>
           </div>
         </section>
       ) : (

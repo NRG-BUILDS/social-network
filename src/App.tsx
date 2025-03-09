@@ -46,7 +46,7 @@ function App() {
   }, [isAuthenticated, username]);
   return (
     <>
-      <Toaster />
+      <Toaster richColors />
 
       <Routes>
         <Route path="/login" element={<Signin />}></Route>
@@ -61,6 +61,7 @@ function App() {
         <Route element={<MessagesLayout />}>
           <Route path="/messages" element={<Messages />}></Route>
           <Route path="/messages/:chatId" element={<Chat />}></Route>
+          <Route path="/messages/new/:username" element={<Chat />}></Route>
         </Route>
         <Route element={<ProfileLayout />}>
           <Route path="/profile" element={<Profile />}></Route>

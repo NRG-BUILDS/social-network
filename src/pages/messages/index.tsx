@@ -1,17 +1,37 @@
 import { Avatar } from "@/components/avatar";
 import { ChatWindow } from "@/components/chat-window";
 import Container from "@/components/container";
+import { LoadingScreen } from "@/components/loader";
 import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useState } from "react";
+import useRequest from "@/hooks/useRequest";
+import { Chat } from "@/types/chats";
+import { User } from "@/types/user";
+import { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router";
 
 const Messages = () => {
   const [showSearchModal, setShowSearchModal] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { loading, error, makeRequest } = useRequest("/chats");
+  const [chats, setChats] = useState<Chat[]>([]);
+  useEffect(() => {
+    fetchChats();
+  }, []);
+  const fetchChats = async () => {
+    makeRequest().then((res) => {
+      if (res.status === "success") {
+        setChats([...res.data.chats]);
+      }
+    });
+  };
 
+  if (loading || error) {
+    return <LoadingScreen loading={loading} error={error} />;
+  }
   if (isDesktop) {
     return (
       <section className="bg-white border lg:rounded-xl">
@@ -20,10 +40,17 @@ const Messages = () => {
         </Container>
         <div className="border-t grid lg:grid-cols-12 divide-x">
           <div className="lg:col-span-4 relative">
-            <ChatItem />
-            <ChatItem />
-            <ChatItem />
-            <ChatItem />
+            {chats.length ? (
+              <div>
+                {chats.map((chat) => (
+                  <ChatItem chat={chat} />
+                ))}
+              </div>
+            ) : (
+              <div className="h-48 flex items-center justify-center w-full text-neutral-500 font-medium">
+                <p>No chats yet</p>
+              </div>
+            )}
             <div className="absolute bottom-5 right-5">
               <NewMessageBtn
                 setShowSearchModal={setShowSearchModal}
@@ -47,9 +74,9 @@ const Messages = () => {
         </Container>
         <div className="border-t grid lg:grid-cols-12 divide-x">
           <div className="lg:col-span-4 relative min-h-[80svh]">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {chats.map((chat, i) => (
               <Link to={"/messages/3"} key={i}>
-                <ChatItem />
+                <ChatItem chat={chat} />
               </Link>
             ))}
 
@@ -68,7 +95,7 @@ const Messages = () => {
 
 export default Messages;
 
-const ChatItem = () => {
+const ChatItem = ({ chat }: { chat?: Chat }) => {
   return (
     <Container className="hover:bg-neutral-50!">
       <div className="flex items-center gap-4">
@@ -76,9 +103,29 @@ const ChatItem = () => {
           <Avatar variant={"sm"} />
         </div>
         <div className="grid text-sm overflow-clip w-full">
-          <span className="font-medium">Bessie Cooper</span>
+          <span className="font-medium">{chat?.owner.name}</span>
           <span className="whitespace-nowrap overflow-hidden text-ellipsis">
-            Hi, Robert. I'm facing some challenges
+            {chat?.latestMessage?.text}
+          </span>
+        </div>
+      </div>
+    </Container>
+  );
+};
+
+const NewChatItem = ({ user }: { user?: User }) => {
+  return (
+    <Container className="hover:bg-neutral-50!">
+      <div className="flex items-center gap-4">
+        <div>
+          <Avatar variant={"sm"} />
+        </div>
+        <div className="grid text-sm overflow-clip w-full">
+          <span className="font-medium">
+            {user?.firstName + " " + user?.lastName}
+          </span>
+          <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+            {user?.bio}
           </span>
         </div>
       </div>
@@ -93,6 +140,21 @@ const NewMessageBtn = ({
   setShowSearchModal: (bool: boolean) => void;
   showSearchModal: boolean;
 }) => {
+  const { loading, error, makeRequest } = useRequest("/profiles");
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  const fetchUsers = async () => {
+    const response = await makeRequest();
+    if (response) {
+      setUsers(response.data.users);
+    }
+  };
+
+  if (loading || error) {
+    return <LoadingScreen loading={loading} error={error} />;
+  }
   return (
     <>
       <Button
@@ -115,11 +177,15 @@ const NewMessageBtn = ({
             className="p-3 bg-neutral-100 rounded block w-full"
             placeholder="Search..."
           />
-          <div className="pt-6 pb-10">
-            <ChatItem />
-            <ChatItem />
-            <ChatItem />
-          </div>
+          <ScrollArea className="h-[60svh]">
+            <div className="pt-6 pb-10">
+              {users.map((user) => (
+                <Link to={`/messages/new/${user.username}`} key={user.username}>
+                  <NewChatItem user={user} />
+                </Link>
+              ))}
+            </div>
+          </ScrollArea>
         </div>
       </Modal>
     </>

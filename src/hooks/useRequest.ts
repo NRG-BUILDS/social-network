@@ -80,7 +80,7 @@ const useRequest = <T = any>(
         return newToken; // Return the new token directly
       }
       if (result?.status === "failure") {
-        toast("Session Expired", {
+        toast.error("Session Expired", {
           description: "Please log in again.",
         });
         navigate("/login", { state: { from: location.pathname } });
@@ -141,7 +141,7 @@ const useRequest = <T = any>(
       // Handle authentication if useAuth is true
       if (useAuth) {
         if (!isAuthenticated) {
-          toast("Unauthorized access", {
+          toast.error("Unauthorized access", {
             description: "Please log in to continue.",
           });
           navigate("/login", { state: { from: location.pathname } });

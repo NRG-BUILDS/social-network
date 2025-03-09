@@ -33,7 +33,7 @@ export const Modal = ({
 }: ModalProps) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  if (isDesktop && useDrawerOnMobile) {
+  if (isDesktop || !useDrawerOnMobile) {
     return (
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
         <DialogContent>
